@@ -67,32 +67,63 @@ function Header() {
     )
 }
 
+// function Menu() {
+//     const pizzas = []
+//     const pizzaNum = pizzas.length;
+//     return (
+//         <div className='menu'>
+//             <h2>Our menu</h2>
+//             {pizzaNum > 0 && // condional rendering using the and operator 
+//                 <ul className='pizzas'>
+//                     {
+//                         pizzaData.map((pizza) => {
+//                             return <Pizza pizzaObj={pizza} key={pizza.name} />
+//                         })
+//                     }
+//                 </ul>}
+//         </div>
+//     )
+// }
 function Menu() {
-
-    function pizzaName() {
-        const { name } = pizzaData;
-        name = pizzaData.map(name => name)
-    }
-
+    const pizzas = pizzaData
+    // const pizzas = []
+    const pizzaNum = pizzas.length;
     return (
         <div className='menu'>
             <h2>Our menu</h2>
-            <Pizza pizzaName='Margherita' ingredients='Bread with italian olive oil and rosemary' image='pizzas/margherita.jpg' price={10}  />
-            <Pizza pizzaName='Focaccia' ingredients='Tomato and mozarella' image='pizzas/focaccia.jpg' price={12} />
+            {
+                pizzaNum>0? 
+                <p>Italiano pizzas, 6 delicious Pizzas to choose from, All from our stone oven, all organic, all delicious</p>
+                :null
+            }
+            {pizzaNum > 0 ? // condional rendering using the Ternary operator operator 
+                <ul className='pizzas'>
+                    {
+                        pizzaData.map((pizza) => {
+                            return <Pizza pizzaObj={pizza} key={pizza.name} />
+                        })
+                    }
+                </ul>
+                : <p> We still repairing our Menu please comback later!</p>}
         </div>
     )
 }
 function Pizza(props) {
-    const{pizzaName,ingredients,image,price}=props
+    const { pizzaObj } = props
     return (
-        <div className='pizza'>
-            <img src={image} alt={pizzaName} />
+        
+        <li className={`pizza ${pizzaObj.soldOut?'sold-out':""}`}>
+            <img src={pizzaObj.photoName} alt={"amr"} />
             <div>
-                <h3>{pizzaName}</h3>
-                <p>{ingredients}</p>
-                <span>{price +3}</span>
+                <h3>{pizzaObj.name}</h3>
+                <p>{pizzaObj.ingredients}</p>
+                {/* {
+                    pizzaObj.soldOut?<span>'SOLD OUT'</span>
+                    :<span>{pizzaObj.price +3}</span>
+                } */}
+                <span>{pizzaObj.soldOut?'SOLD OUT' : pizzaObj.price + 3}</span>
             </div>
-        </div>
+        </li>
     )
 
 }
@@ -101,17 +132,33 @@ function Footer() {
     const openHour = 12;
     const closeHour = 22;
     const isOpen = hour >= openHour && hour <= closeHour;
-    console.log(isOpen)
 
+    // return (
+    //     <div className='order'>
+    //         {/* condional rendering using the and operator */}
+    //         <footer className='footer'>{isOpen && <p>We Are Open until {closeHour}.00, You can visit us or order online !</p>}</footer>
+    //         <button className='btn'> Order Now !</button>
+    //     </div>
+    // )
     return (
         <footer className='footer'>
-            {new Date().toLocaleTimeString()}. We are currently open
+            {/* condional rendering using the Ternary operator */}
+            {isOpen ? <Order closeHour={closeHour} />
+                : (<p>WE are close now!, You can visit us betweem {openHour}.00 and {closeHour}.00</p>)}
         </footer>
     )
 
 }
 
-
+function Order(props) {
+    const {closeHour}=props
+    return (
+        <div className='order'>
+            <p>We Are Open until {closeHour}.00, You can visit us or order online !</p>
+            <button className='btn'> Order Now!</button>
+        </div>
+    )
+}
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
